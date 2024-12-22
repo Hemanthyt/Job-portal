@@ -6,7 +6,7 @@ Sentry.init({
   dsn: "https://d629cf0a1c3ff7cdfac91b4c13aac095@o4508507310522368.ingest.us.sentry.io/4508507315896320",
   integrations: [nodeProfilingIntegration(), Sentry.mongooseIntegration()],
   // Tracing
-  //   tracesSampleRate: 1.0, //  Capture 100% of the transactions
+  tracesSampleRate: 1.0, //  Capture 100% of the transactions
 });
 // Manually call startProfiler and stopProfiler
 // to profile the code in between

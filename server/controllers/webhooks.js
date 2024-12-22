@@ -23,23 +23,22 @@ export const clerkWebHooks = async (req, res) => {
     // Switch case for different events
     switch (type) {
       case "user.created": {
-        console.log("Creating");
-
         const userData = {
           _id: data.id,
-          email: data.email_address[0].email_address,
+          email: data.email_addresses[0].email_address,
           name: data.first_name + " " + data.last_name,
           image: data.image_url,
           resume: "",
         };
         console.log(userData);
         await User.create(userData);
+
         res.json({});
         break;
       }
       case "user.updated": {
         const userData = {
-          email: data.email_address[0].email_address,
+          email: data.email_addresses[0].email_address,
           name: data.first_name + " " + data.last_name,
           image: data.image_url,
         };
