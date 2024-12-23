@@ -1,10 +1,14 @@
-import React, { useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { useState } from "react";
 
 import Quill from "quill";
-import { JobCategories, JobLocations } from "../assets/assets";
+import { JobCategories, JobLocations, jobsData } from "../assets/assets";
+import axios from "axios";
+import { AppContext } from "../context/AppContext";
+import { toast } from "react-toastify";
 
 const AddJob = () => {
+  const { backendUrl, companyToken } = useContext(AppContext);
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("Bangalore");
   const [category, setCategory] = useState("Programming");
@@ -25,8 +29,43 @@ const AddJob = () => {
     return () => {};
   }, []);
 
+  const onSubmitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const description = quillRef.current.root.innerHTML;
+      const { data } = await axios.post(
+        backendUrl + "/api/company/post-job",
+        {
+          title,
+          description,
+          category,
+          location,
+          level,
+          salary,
+        },
+        {
+          headers: {
+            token: companyToken,
+          },
+        }
+      );
+      if (data.success) {
+        toast.success("Job Added Successfully");
+        setTitle("");
+        setSalary(0);
+        quillRef.current.root.innerHTML = "";
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+    jobsData;
+  };
+
   return (
     <form
+      onSubmit={onSubmitHandler}
       action=""
       className=" container p-4 flex flex-col w-full items-start gap-3"
     >
